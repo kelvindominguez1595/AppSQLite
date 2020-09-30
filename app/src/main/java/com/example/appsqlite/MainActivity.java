@@ -194,7 +194,11 @@ private FABToolbarLayout morph;
             }
 
         }
-
+    //
+    private boolean CheckPermission(String permission){
+        int result = this.checkCallingOrSelfPermission(permission);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
     // para el backup
     private void backupDatabae(){
         try{
