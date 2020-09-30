@@ -174,7 +174,14 @@ private FABToolbarLayout morph;
         btn_csv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Prueba de toast", Toast.LENGTH_SHORT).show();
+                // validamos si estan los permisos
+                if(CheckPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+                    // si hay permisos entonces hacer el backup
+                    backupDatabae();
+                }else{
+                    // si no hay permisos entonces preguntarle al usuario que de los permisos
+                    requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_ASK_STORAGE);
+                }
             }
         });
 
