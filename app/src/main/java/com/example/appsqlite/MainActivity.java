@@ -44,6 +44,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements  View.OnClickListener {
 
@@ -180,17 +182,51 @@ private FABToolbarLayout morph;
 
         }
     // Nos da el resutado en caso no existan permisos activado para utilizar el STORAGE
-    private void requestPermissions(int requestCode, String[] permissions, int[] grantResults) {
-        if(REQUEST_CODE_ASK_STORAGE == requestCode) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //  Puedes mostrar un mensaje personalizado aqui
-            } else {
-                // De igualmanera si no aceptaron los permisos entonces mostrar otro mensaje
+        private void requestPermissions(int requestCode, String[] permissions, int[] grantResults) {
+            if(REQUEST_CODE_ASK_STORAGE == requestCode) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //  Puedes mostrar un mensaje personalizado aqui
+                } else {
+                    // De igualmanera si no aceptaron los permisos entonces mostrar otro mensaje
+                }
+            }else{
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             }
-        }else{
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         }
 
+    // para el backup
+    private void backupDatabae(){
+        try{
+
+            File memoriaSd = Environment.getExternalStorageDirectory();
+            File datosBd = Environment.getDataDirectory();
+            String packageName = "com.example.appsqlite"; // este el id de la app
+            String sourceDBNAME = "administracion.db"; // la bd
+            String targeDBName = "dbCopy"; // el nombre del backup
+            if(memoriaSd.canWrite()){
+                Date now = new Date(); // la fecha de hoy
+                String currentBDPath = "data/"+ packageName + "/databases/" + sourceDBNAME; // Este es una forma para obtener las ruta y la bd
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm"); // para poner la fecha del backup
+                String backupBDPach = targeDBName + dateFormat.format(now) + ".db"; // renombramos BD
+
+                File currentBD = new File(datosBd, currentBDPath);
+                File backupBd = new File(memoriaSd, backupBDPach);
+                // Hasta aqui ya hice la copia de la BD ahora debemos de pasar esa copia a la SD
+                Toast.makeText(MainActivity.this, "Backup debe realizado ", Toast.LENGTH_SHORT).show();
+
+                Log.i("backup","backupDB=" + backupBd.getAbsolutePath());
+                Log.i("backup","sourceDB=" + currentBD.getAbsolutePath());
+
+                FileChannel src = new FileInputStream(currentBD).getChannel(); // ponemos el archivo en la ruta
+                FileChannel dst = new FileOutputStream(backupBd).getChannel(); // pasamos los datos al canal para luego enviarlo a la memoria
+                dst.transferFrom(src, 0, src.size()); // pasamos la bd copia a la memoria
+                src.close(); // cerramos la ruta
+                dst.close(); // cerramos los datos del backup
+            }
+        }catch (Exception e){
+            Toast.makeText(MainActivity.this, "Ah ocurrido un error "+e.toString(), Toast.LENGTH_LONG).show();
+        }
     }
         private void confirmacion(){
         String mensaje ="Realemente desea salir?";
