@@ -46,6 +46,8 @@ import java.io.InputStream;
 import java.nio.channels.FileChannel;
 
 public class MainActivity extends AppCompatActivity implements  View.OnClickListener {
+
+    private final int REQUEST_CODE_ASK_STORAGE = 120; // CODIGO PARA VALIDAR EL PERMISO
     private EditText et_codigo,et_descripcion,et_precio;
     private Button btn_guardar, btn_consultar1,btn_consultar2,btn_eliminar,btn_actualizar,btn_csv;
     private TextView tv_resultado;
