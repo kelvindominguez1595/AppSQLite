@@ -85,9 +85,6 @@ private FABToolbarLayout morph;
         return super.onKeyDown(keyCode, event);
     }
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,16 +117,8 @@ private FABToolbarLayout morph;
         });*/
 
         final FloatingActionButton fab = findViewById(R.id.fab);
-
-
-
-
-
-
         morph =findViewById(R.id.fabtoolbar);
-
         View uno,dos,tres,cuatro,cinco,salir;
-
         uno=findViewById(R.id.uno);
         dos=findViewById(R.id.dos);
         tres=findViewById(R.id.tres);
@@ -145,8 +134,6 @@ private FABToolbarLayout morph;
         cuatro.setOnClickListener(this);
         cinco.setOnClickListener(this);
         salir.setOnClickListener(this);
-
-
 
         et_codigo = findViewById(R.id.et_codigo);
         et_descripcion = findViewById(R.id.et_descripcion);
@@ -182,19 +169,29 @@ private FABToolbarLayout morph;
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////
-btn_csv.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        Toast.makeText(MainActivity.this, "Prueba de toast", Toast.LENGTH_SHORT).show();
-
-
-    }
-});
+        btn_csv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Prueba de toast", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         //////////////////////////////////////////////////////////////////////////////
 
         }
+    // Nos da el resutado en caso no existan permisos activado para utilizar el STORAGE
+    private void requestPermissions(int requestCode, String[] permissions, int[] grantResults) {
+        if(REQUEST_CODE_ASK_STORAGE == requestCode) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //  Puedes mostrar un mensaje personalizado aqui
+            } else {
+                // De igualmanera si no aceptaron los permisos entonces mostrar otro mensaje
+            }
+        }else{
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
 
+    }
         private void confirmacion(){
         String mensaje ="Realemente desea salir?";
         dialogo = new AlertDialog.Builder(MainActivity.this);
